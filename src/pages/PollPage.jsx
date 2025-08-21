@@ -17,8 +17,7 @@ function PollPage() {
 
   useEffect(() => {
     // Fetch initial poll data
-    axios.get(`${API_URL}/polls/${id}`, { withCredentials: true })
-    api.get(`/polls/${id}`)
+       api.get(`/polls/${id}`)
       .then(response => {
         setPoll(response.data);
         if(response.data.userVote) {
