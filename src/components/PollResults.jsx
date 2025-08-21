@@ -1,5 +1,5 @@
 import React from 'react';
-
+import api from "../api/axios";
 function PollResults({ poll, userVote }) {
   const totalVotes = poll.totalVotes || poll.options.reduce((sum, opt) => sum + opt.votes, 0);
 
@@ -29,5 +29,12 @@ function PollResults({ poll, userVote }) {
     </div>
   );
 }
-
+const fetchPolls = async () => {
+  try {
+    const res = await api.get("/polls");
+    console.log(res.data);
+  } catch (err) {
+    console.error(err);
+  }
+};
 export default PollResults;

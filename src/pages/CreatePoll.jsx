@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-
+import api from '../api/axios';
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 function CreatePoll() {
@@ -62,7 +62,7 @@ function CreatePoll() {
     }
 
     try {
-      const response = await axios.post(`${API_URL}/polls`, {
+      const response = await api.post(`/polls`, {
         question,
         options: filteredOptions,
       });

@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import io from 'socket.io-client';
 import PollResults from '../components/PollResults';
-
+import api from '../api/axios';
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || 'http://localhost:5000';
 
@@ -18,6 +18,7 @@ function PollPage() {
   useEffect(() => {
     // Fetch initial poll data
     axios.get(`${API_URL}/polls/${id}`, { withCredentials: true })
+    api.get(`/polls/${id}`)
       .then(response => {
         setPoll(response.data);
         if(response.data.userVote) {
@@ -49,7 +50,7 @@ function PollPage() {
       return;
     }
     try {
-      await axios.post(`${API_URL}/polls/${id}/vote`, { optionId: selectedOption }, { withCredentials: true });
+      await api.post(`/polls/${id}/vote`, { optionId: selectedOption });
       setVoted(true);
       setError('');
     } catch (err) {
