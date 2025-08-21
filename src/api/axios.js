@@ -1,10 +1,8 @@
-// src/api/axios.js
 import axios from "axios";
 
-const API_URL =
-  process.env.NODE_ENV === "production"
-    ? "https://poll-app-backend.onrender.com/api"
-    : "http://localhost:5000/api";
+// This is the ONLY place the API URL should be defined.
+// It correctly reads the environment variable provided by Vite.
+const API_URL = import.meta.env.VITE_API_URL;
 
 const api = axios.create({
   baseURL: API_URL,

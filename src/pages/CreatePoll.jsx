@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import api from '../api/axios';
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 function CreatePoll() {
   const [question, setQuestion] = useState('');
@@ -52,26 +50,32 @@ function CreatePoll() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    setIsLoading(true);
 
     const filteredOptions = options.filter(opt => opt.trim() !== '');
     if (question.trim().length === 0 || filteredOptions.length < 2) {
       setError('Please provide a question and at least two options.');
-      setIsLoading(false);
       return;
     }
+
+    // --- KEY CHANGES START HERE ---
+    
+    // 1. Immediately set loading state to give the user instant feedback
+    setIsLoading(true);
 
     try {
       const response = await api.post(`/polls`, {
         question,
         options: filteredOptions,
       });
+      // On success, navigate to the next page
       navigate(`/poll/${response.data.pollId}/created`);
     } catch (err) {
-      setError('Failed to create poll. Please try again.');
+      // On error, show a more helpful message
+      setError('Failed to create poll. The server might be waking up. Please try again in a moment.');
       console.error(err);
     } finally {
-        setIsLoading(false);
+      // 2. ALWAYS set loading back to false, whether the request succeeded or failed
+      setIsLoading(false); 
     }
   };
 
@@ -90,6 +94,7 @@ function CreatePoll() {
             maxLength="120"
             placeholder="e.g., Best pizza topping? Pepperoni, Mushrooms"
             required
+            disabled={isLoading} // Optionally disable inputs while loading
           />
         </div>
         
@@ -102,9 +107,10 @@ function CreatePoll() {
               value={option}
               onChange={(e) => handleOptionChange(index, e.target.value)}
               required
+              disabled={isLoading} // Optionally disable inputs while loading
             />
             {options.length > 2 && (
-              <button type="button" className="remove-btn" onClick={() => removeOption(index)}>
+              <button type="button" className="remove-btn" onClick={() => removeOption(index)} disabled={isLoading}>
                 &times;
               </button>
             )}
@@ -112,13 +118,14 @@ function CreatePoll() {
         ))}
 
         {options.length < 4 && (
-          <button type="button" className="secondary-btn" onClick={addOption}>
+          <button type="button" className="secondary-btn" onClick={addOption} disabled={isLoading}>
             Add Option
           </button>
         )}
 
         {error && <p className="error">{error}</p>}
         
+        {/* 3. This button now gives instant feedback */}
         <button type="submit" className="primary-btn" disabled={isLoading}>
           {isLoading ? 'Creating...' : 'Create Poll'}
         </button>
