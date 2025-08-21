@@ -1,0 +1,21 @@
+:root {
+  --primary-color: #6a48d9;
+  --secondary-color: #f0edff;
+  --text-color: #333;
+  --bg-color: #f4f5f7;
+  --card-bg: #ffffff;
+  --border-color: #e0e0e0;
+  --success-color: #4caf50;
+  --error-color: #f44336;
+  --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-family);
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  display: flex;
+  justify-content: center;
+  padding: 2rem 1rem;
+}
